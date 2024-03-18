@@ -40,22 +40,6 @@ public class GodSatisfaction : MonoBehaviour
         {
             satisfaction = maxSatis;
         }
-        //if (satisfaction > 0f)
-        //{
-        //    goodLine.value = (float)satisfaction / (float)maxSatis;
-        //    badLine.value = 0f;
-        //}
-        //else if (satisfaction < 0f)
-        //{
-        //    badLine.value = (float)satisfaction / (float)minSatis * (-1);
-        //    goodLine.value = 0f;
-        //}
-        //else
-        //{
-        //    goodLine.value = 0f;
-        //    badLine.value = 0f;
-        //}
-
     }
 
     public void SetSatisfaction(int satis)

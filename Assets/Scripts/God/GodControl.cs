@@ -49,54 +49,54 @@ public class GodControl : MonoBehaviour
                     return null;
                 }
             case "God3":
-                if (god2 != null)
+                if (god3 != null)
                 {
-                    return god2;
+                    return god3;
                 }
                 else
                 {
                     return null;
                 }
             case "God4":
-                if (god2 != null)
+                if (god4 != null)
                 {
-                    return god2;
+                    return god4;
                 }
                 else
                 {
                     return null;
                 }
             case "God5":
-                if (god2 != null)
+                if (god5 != null)
                 {
-                    return god2 ;
+                    return god5 ;
                 }
                 else
                 {
                     return null;
                 }
             case "God6":
-                if (god2 != null)
+                if (god6 != null)
                 {
-                    return god2;
+                    return god6;
                 }
                 else
                 {
                     return null;
                 }
             case "God7":
-                if (god2 != null)
+                if (god7 != null)
                 {
-                    return god2;
+                    return god7;
                 }
                 else
                 {
                     return null;
                 }
             case "God8":
-                if (god2 != null)
+                if (god8 != null)
                 {
-                    return god2;
+                    return god8;
                 }
                 else
                 {
@@ -175,6 +175,37 @@ public class GodControl : MonoBehaviour
                 god8.SetDisplay(atr);
                 gods[locate] = god8;
                 locate++;
+                break;
+        }
+    }
+
+    public void BuffDebuffCheck(string atr) 
+    {
+        switch (atr)
+        {
+            case "God1":
+
+                break;
+            case "God2":
+
+                break;
+            case "God3":
+
+                break;
+            case "God4":
+
+                break;
+            case "God5":
+
+                break;
+            case "God6":
+
+                break;
+            case "God7":
+
+                break;
+            case "God8":
+
                 break;
         }
     }

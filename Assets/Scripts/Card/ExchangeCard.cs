@@ -31,6 +31,7 @@ public class ExchangeCard : MonoBehaviour
     private void Start()
     {
         resManager = FindAnyObjectByType<ResManager>();
+        godControl = FindAnyObjectByType<GodControl>();
         UpdateCard();
     }
 
@@ -88,7 +89,7 @@ public class ExchangeCard : MonoBehaviour
 
     public void Exchange()
     {
-        //TakeGods(cardAtr[repositoryPosition]);
+        TakeGods(cardAtr[repositoryPosition]);
         resManager.SetRes(resTypes2[repositoryPosition], resCost1[repositoryPosition] * -1);
         resManager.SetRes(resTypes1[repositoryPosition], resCost2[repositoryPosition]);
         card.UpdAnyCard();
@@ -105,62 +106,70 @@ public class ExchangeCard : MonoBehaviour
     {
         switch (atr)
         {
-            case "God1":
-                CheckAndSetSatisfaction(atr, 10);
+            case "Atr1":
+                CheckAndSetSatisfaction("God1", 2);
                 break;
-            case "God2":
-                CheckAndSetSatisfaction(atr, 10);
+            case "Atr2":
                 break;
-            case "God3":
-                CheckAndSetSatisfaction(atr, 10);
+            case "Atr3":
+                CheckAndSetSatisfaction("God4", 2);
                 break;
-            case "God4":
-                CheckAndSetSatisfaction(atr, 10);
+            case "Atr4":
+                CheckAndSetSatisfaction("God7", -2);
                 break;
-            case "God5":
-                CheckAndSetSatisfaction(atr, 10);
+            case "Atr5":
+                CheckAndSetSatisfaction("God2", 2);
                 break;
-            case "God6":
-                CheckAndSetSatisfaction(atr, 10);
+            case "Atr6":
+                CheckAndSetSatisfaction("God6", -2);
                 break;
-            case "God7":
-                CheckAndSetSatisfaction(atr, 10);
+            case "Atr7":
                 break;
-            case "God8":
-                CheckAndSetSatisfaction(atr, 10);
+            case "Atr8":
+                CheckAndSetSatisfaction("God7", 2);
                 break;
-            case "God11":
-                CheckAndSetSatisfaction("God1", 5);
+            case "Atr9":
+                CheckAndSetSatisfaction("God5", -2);
                 break;
-            case "God21":
-                CheckAndSetSatisfaction("God2", 5);
+            case "Atr10":
+                CheckAndSetSatisfaction("God2", -2);
                 break;
-            case "God31":
-                CheckAndSetSatisfaction("God3", 5);
+            case "Atr11":
                 break;
-            case "God41":
-                CheckAndSetSatisfaction("God4", 5);
+            case "Atr12":
+                CheckAndSetSatisfaction("God1", -2);
                 break;
-            case "God51":
-                CheckAndSetSatisfaction("God5", 5);
+            case "Atr13":
+                CheckAndSetSatisfaction("God8", 2);
                 break;
-            case "God61":
-                CheckAndSetSatisfaction("God6", 5);
+            case "Atr14":
+                CheckAndSetSatisfaction("God3", -2);
                 break;
-            case "God71":
-                CheckAndSetSatisfaction("God7", 5);
+            case "Atr15":
                 break;
-            case "God81":
-                CheckAndSetSatisfaction("God8", 5);
+            case "Atr16":
+                CheckAndSetSatisfaction("God4", -2);
+                break;
+            case "Atr17":
+                CheckAndSetSatisfaction("God3", 2);
+                break;
+            case "Atr18":
+                CheckAndSetSatisfaction("God5", 2);
+                break;
+            case "Atr19":
+                CheckAndSetSatisfaction("God8", -2);
+                break;
+            case "Atr20":
+                CheckAndSetSatisfaction("God6", 2);
                 break;
         }
     }
 
     private void CheckAndSetSatisfaction(string atr, int satis)
     {
-        godSatisfaction = godControl.FindGods(atr);
-        if (godSatisfaction != null)
+        if (godControl.FindGods(atr) != null)
         {
+            godSatisfaction = godControl.FindGods(atr);
             godSatisfaction.SetSatisfaction(satis);
         }
         godSatisfaction = null;

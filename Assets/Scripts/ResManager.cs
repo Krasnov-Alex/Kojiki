@@ -13,12 +13,9 @@ public class ResManager : MonoBehaviour
     public int hap = 1000;
     public int man = 1000;
 
-    //private int materialResourcesNew;
-    //private int foodResourcesNew;
-    //private int happyResourcesNew;
-    //private int peopleResoursesLast = 1000;
-    //private int peopleCoef; // = peopleResoursesLast / 1000;
-    //private int peopleResourcesAdd = 500;
+    private int peopleCoefConst = 1000;
+    private int peopleCoef; // = peopleResoursesLast / 1000;
+    private int peopleResourcesAdd = 500;
 
     private int materialBuild = 1;
     private int foodBuild = 1;
@@ -54,11 +51,6 @@ public class ResManager : MonoBehaviour
             gamover.GameOver(false);
         }
     }
-
-    //private void GameOver()
-    //{
-    //    gamover.SetActive(true);
-    //}
 
     public void SetRes(string material, int cost)
     {

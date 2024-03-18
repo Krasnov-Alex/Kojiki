@@ -23,6 +23,7 @@ public class BuildCard : MonoBehaviour
     public ResManager resManager;
     public GameObject ground;
     public int count = 6;
+    private int godCount = 2;
 
     
 
@@ -187,5 +188,11 @@ public class BuildCard : MonoBehaviour
             godSatisfaction.SetSatisfaction(satis);
         }
         godSatisfaction = null;
+    }
+
+    public void AddGod(int atr)
+    {
+        gods[godCount] = atr;
+        godCount++;
     }
 }

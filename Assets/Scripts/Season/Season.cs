@@ -10,17 +10,22 @@ public class Season : MonoBehaviour
     [SerializeField] private Sprite autumn;
     [SerializeField] private Sprite spring;
     [SerializeField] private Sprite winter;
+    private bool isGodSeason = false;
     public int year = 1; 
     public int month = 1;
     public Text yearTXT;
 
 
     private Gamover gamover;
+    private GodControl godControl;
+    private BuildCard buildCard;
 
     private void Start()
     {
         SetSeason();
         gamover = FindAnyObjectByType<Gamover>();
+        godControl = FindAnyObjectByType<GodControl>();
+        buildCard = FindAnyObjectByType<BuildCard>();
         yearTXT.text = year.ToString();
     }
 
@@ -37,6 +42,15 @@ public class Season : MonoBehaviour
         if (year == 10)
         {
             gamover.GameOver(true);
+        }
+
+        if (month == 6 && !isGodSeason)
+        {
+            godControl.SetGod("God3");
+            godControl.SetGod("God4");
+            buildCard.AddGod(3);
+            buildCard.AddGod(4);
+            isGodSeason = true;
         }
     }
 
