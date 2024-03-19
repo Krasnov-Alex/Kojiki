@@ -31,7 +31,6 @@ public class ExchangeCard : MonoBehaviour
     private void Start()
     {
         resManager = FindAnyObjectByType<ResManager>();
-        godControl = FindAnyObjectByType<GodControl>();
         UpdateCard();
     }
 
@@ -50,10 +49,10 @@ public class ExchangeCard : MonoBehaviour
         TextCart.GetComponent<Text>().text = cardText[repositoryPosition];
 
         TextCart = this.gameObject.transform.GetChild(2).gameObject;
-        TextCart.GetComponent<Text>().text = (resCost1[repositoryPosition] * -1).ToString();
+        TextCart.GetComponent<Text>().text = ((resCost1[repositoryPosition] * (resManager.Coef(resTypes1[repositoryPosition]))) * -1).ToString();
 
         TextCart = this.gameObject.transform.GetChild(4).gameObject;
-        TextCart.GetComponent<Text>().text = resCost2[repositoryPosition].ToString();
+        TextCart.GetComponent<Text>().text = (resCost2[repositoryPosition] * (resManager.Coef(resTypes2[repositoryPosition]))).ToString();
 
         switch (resTypes1[repositoryPosition])
         {
@@ -89,7 +88,7 @@ public class ExchangeCard : MonoBehaviour
 
     public void Exchange()
     {
-        TakeGods(cardAtr[repositoryPosition]);
+        //TakeGods(cardAtr[repositoryPosition]);
         resManager.SetRes(resTypes2[repositoryPosition], resCost1[repositoryPosition] * -1);
         resManager.SetRes(resTypes1[repositoryPosition], resCost2[repositoryPosition]);
         card.UpdAnyCard();
@@ -106,70 +105,62 @@ public class ExchangeCard : MonoBehaviour
     {
         switch (atr)
         {
-            case "Atr1":
-                CheckAndSetSatisfaction("God1", 2);
+            case "God1":
+                CheckAndSetSatisfaction(atr, 10);
                 break;
-            case "Atr2":
+            case "God2":
+                CheckAndSetSatisfaction(atr, 10);
                 break;
-            case "Atr3":
-                CheckAndSetSatisfaction("God4", 2);
+            case "God3":
+                CheckAndSetSatisfaction(atr, 10);
                 break;
-            case "Atr4":
-                CheckAndSetSatisfaction("God7", -2);
+            case "God4":
+                CheckAndSetSatisfaction(atr, 10);
                 break;
-            case "Atr5":
-                CheckAndSetSatisfaction("God2", 2);
+            case "God5":
+                CheckAndSetSatisfaction(atr, 10);
                 break;
-            case "Atr6":
-                CheckAndSetSatisfaction("God6", -2);
+            case "God6":
+                CheckAndSetSatisfaction(atr, 10);
                 break;
-            case "Atr7":
+            case "God7":
+                CheckAndSetSatisfaction(atr, 10);
                 break;
-            case "Atr8":
-                CheckAndSetSatisfaction("God7", 2);
+            case "God8":
+                CheckAndSetSatisfaction(atr, 10);
                 break;
-            case "Atr9":
-                CheckAndSetSatisfaction("God5", -2);
+            case "God11":
+                CheckAndSetSatisfaction("God1", 5);
                 break;
-            case "Atr10":
-                CheckAndSetSatisfaction("God2", -2);
+            case "God21":
+                CheckAndSetSatisfaction("God2", 5);
                 break;
-            case "Atr11":
+            case "God31":
+                CheckAndSetSatisfaction("God3", 5);
                 break;
-            case "Atr12":
-                CheckAndSetSatisfaction("God1", -2);
+            case "God41":
+                CheckAndSetSatisfaction("God4", 5);
                 break;
-            case "Atr13":
-                CheckAndSetSatisfaction("God8", 2);
+            case "God51":
+                CheckAndSetSatisfaction("God5", 5);
                 break;
-            case "Atr14":
-                CheckAndSetSatisfaction("God3", -2);
+            case "God61":
+                CheckAndSetSatisfaction("God6", 5);
                 break;
-            case "Atr15":
+            case "God71":
+                CheckAndSetSatisfaction("God7", 5);
                 break;
-            case "Atr16":
-                CheckAndSetSatisfaction("God4", -2);
-                break;
-            case "Atr17":
-                CheckAndSetSatisfaction("God3", 2);
-                break;
-            case "Atr18":
-                CheckAndSetSatisfaction("God5", 2);
-                break;
-            case "Atr19":
-                CheckAndSetSatisfaction("God8", -2);
-                break;
-            case "Atr20":
-                CheckAndSetSatisfaction("God6", 2);
+            case "God81":
+                CheckAndSetSatisfaction("God8", 5);
                 break;
         }
     }
 
     private void CheckAndSetSatisfaction(string atr, int satis)
     {
-        if (godControl.FindGods(atr) != null)
+        godSatisfaction = godControl.FindGods(atr);
+        if (godSatisfaction != null)
         {
-            godSatisfaction = godControl.FindGods(atr);
             godSatisfaction.SetSatisfaction(satis);
         }
         godSatisfaction = null;

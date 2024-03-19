@@ -23,7 +23,6 @@ public class BuildCard : MonoBehaviour
     public ResManager resManager;
     public GameObject ground;
     public int count = 6;
-    private int godCount = 2;
 
     
 
@@ -37,10 +36,7 @@ public class BuildCard : MonoBehaviour
         SetText();
     }
 
-    private void Update()
-    {
-        //SetText();
-    }
+    
     private void SetText()
     {
         GameObject TextCart;
@@ -52,23 +48,7 @@ public class BuildCard : MonoBehaviour
         TextCart.GetComponent<Text>().text = cartText[repositoryPosition];
 
         TextCart = this.gameObject.transform.GetChild(2).gameObject;
-        TextCart.GetComponent<Text>().text = buildCost.ToString();
-
-        //switch (resTypes[repositoryPosition])
-        //{
-        //    case "Mat":
-        //        resSprite.sprite = material;
-        //        break;
-        //    case "Hap":
-        //        resSprite.sprite = happy;
-        //        break;
-        //    case "Man":
-        //        resSprite.sprite = people;
-        //        break;
-        //    case "Eat":
-        //        resSprite.sprite = eat;
-        //        break;
-        //}
+        TextCart.GetComponent<Text>().text = (buildCost * resManager.Coef("Mat")).ToString();
     }
 
     public void NewAdd()
@@ -188,11 +168,5 @@ public class BuildCard : MonoBehaviour
             godSatisfaction.SetSatisfaction(satis);
         }
         godSatisfaction = null;
-    }
-
-    public void AddGod(int atr)
-    {
-        gods[godCount] = atr;
-        godCount++;
     }
 }

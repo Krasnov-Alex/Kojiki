@@ -50,7 +50,7 @@ public class ExtractionCard : MonoBehaviour
         TextCart.GetComponent<Text>().text = cardText[repositoryPosition];
 
         TextCart = this.gameObject.transform.GetChild(2).gameObject;
-        TextCart.GetComponent<Text>().text = (resCosts[repositoryPosition] * resManager.ExtractionCoef(resTypes[repositoryPosition])).ToString();
+        TextCart.GetComponent<Text>().text = (resCosts[repositoryPosition] * resManager.Coef(resTypes[repositoryPosition])).ToString();
 
         switch (resTypes[repositoryPosition])
         {
@@ -71,7 +71,7 @@ public class ExtractionCard : MonoBehaviour
 
     public void Extraction()
     {
-        resManager.SetRes(nameRes, resCosts[repositoryPosition] * resManager.ExtractionCoef(resTypes[repositoryPosition]));
+        resManager.SetRes(nameRes, resCosts[repositoryPosition]);
         card.UpdAnyCard();
         for (int i = 0; i < godControl.locate;  i++)
         {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -107,6 +108,15 @@ public class GodControl : MonoBehaviour
         }
     }
 
+    //private void SetGod1(string atr, ref GodSatisfaction god1)
+    //{
+    //    GameObject target = this.gameObject.transform.GetChild(locate).gameObject;
+    //    GameObject godd = Instantiate(godSatis, target.transform.position, Quaternion.identity, this.gameObject.transform);
+    //    god1 = godd.GetComponent<GodSatisfaction>();
+    //    god1.SetDisplay(atr);
+    //    gods[locate] = god1;
+    //    locate++;
+    //}
     
     public void SetGod(string atr)
     {

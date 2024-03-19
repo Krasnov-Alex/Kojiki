@@ -13,9 +13,18 @@ public class ResManager : MonoBehaviour
     public int hap = 1000;
     public int man = 1000;
 
+
+    //private int materialResourcesNew;
+    //private int foodResourcesNew;
+    //private int happyResourcesNew;
+    //private int peopleResoursesLast = 1000;
+    //private int peopleCoef; // = peopleResoursesLast / 1000;
+    //private int peopleResourcesAdd = 500;
+
     private int peopleCoefConst = 1000;
-    private int peopleCoef; // = peopleResoursesLast / 1000;
+    // private int peopleCoef; // = peopleResoursesLast / 1000;
     private int peopleResourcesAdd = 500;
+
 
     private int materialBuild = 1;
     private int foodBuild = 1;
@@ -35,9 +44,13 @@ public class ResManager : MonoBehaviour
     public Text hapTXT;
     public Text matTXT;
     public Text manTXT;
+    public Text debuffTXT;
+
+    private Season season;
 
     private void Start()
     {
+        season = FindAnyObjectByType<Season>();
         gamover = FindAnyObjectByType<Gamover>();
         TextUpdate();
     }
@@ -51,25 +64,59 @@ public class ResManager : MonoBehaviour
             gamover.GameOver(false);
         }
     }
+    //      if cardTake = 1
+    //        materialResourcesNew = materialResources + (((materialBuildNew * cardTakeNum) * peopleCoefNew) * seasonCoef); // новое количество ресурсов в зависимости от количества зданий этих ресурсов, выбора карточки добычи, множителя от населения и множителя сезона
+
+    public int Coef(string atr)
+    {
+        //return (int)1.5f;
+        return atr switch
+        {
+            "Mat" => (int)((float)materialBuild * PeopleCoef()),
+            "Man" => (int)((float)peopleBuild * PeopleCoef()),
+            "Eat" => (int)((float)foodBuild * PeopleCoef()),
+            "Hap" => (int)((float)happyBuild * PeopleCoef()),
+            _ => 1,
+        };
+    }
+
+    public float PeopleCoef()
+    {
+        return (float)((float)man / (float)peopleCoefConst);
+    }
+
+    //private void GameOver()
+    //{
+    //    gamover.SetActive(true);
+    //}
 
     public void SetRes(string material, int cost)
     {
         if (material == "Eat")
         {
-            eat += cost;
+            eat += (int)((float)cost * Coef(material));
         }
         else if (material == "Mat")
         {
-            mat += cost;
+            mat += (int)((float)cost * Coef(material));
         }
         else if (material == "Hap")
         {
-            hap += cost;
+            hap += (int)((float)cost * Coef(material));
         }
         else if(material == "Man")
         {
-            man += cost;
+            man += (int)((float)cost * Coef(material));
         }
+    }
+
+    
+
+    public void SeasonSetRes(int atr)
+    {
+        SetRes("Mat", atr * -1);
+        SetRes("Hap", atr * -1);
+        SetRes("Eat", atr * -1);
     }
 
     private void TextUpdate()
@@ -78,6 +125,7 @@ public class ResManager : MonoBehaviour
         hapTXT.text = hap.ToString();
         matTXT.text = mat.ToString();
         manTXT.text = man.ToString();
+        debuffTXT.text = season.SeasonDebuff(season.seasonNow).ToString();
     }
 
     public void AddBuild(string atr)
