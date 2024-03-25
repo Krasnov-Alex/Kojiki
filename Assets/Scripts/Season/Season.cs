@@ -43,7 +43,7 @@ public class Season : MonoBehaviour
     public void CreateStep()
     {
         month++;
-        if (((float)month -1) % 12 == 0)
+        if (((float)month -1) % 24 == 0)
         {
             year++;
             month = 1;
@@ -104,19 +104,19 @@ public class Season : MonoBehaviour
 
     private int GetSeason()
     {
-        if (month == 12 || month <= 2)
+        if (month == 23 || month == 24 || month <= 4)
         {
             return 1;
         }
-        else if (month >= 3 && month <= 5)
+        else if (month >= 5 && month <= 10)
         {
             return 2;
         }
-        else if (month >= 6 && month <= 8)
+        else if (month >= 11 && month <= 16)
         {
             return 3;
         }
-        else if (month >= 9 && month <= 11)
+        else if (month >= 17 && month <= 22)
         {
             return 4;
         }

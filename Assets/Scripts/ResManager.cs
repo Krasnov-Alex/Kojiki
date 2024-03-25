@@ -167,15 +167,6 @@ public class ResManager : MonoBehaviour
             case "God5":
                 templeSu++;
                 break;
-            case "God6":
-                templeTk++;
-                break;
-            case "God7":
-                templeOk++;
-                break;
-            case "God8":
-                templeEb++;
-                break;
             case "Mat":
                 materialBuild++;
                 break;
@@ -187,7 +178,7 @@ public class ResManager : MonoBehaviour
                 break;
             case "Man":
                 peopleBuild++;
-                SetRes("Man", (int)(500f/Coef("Man")));
+                SetRes("Man", 500);
                 break;
 
         }

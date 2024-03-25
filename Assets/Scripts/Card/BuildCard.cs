@@ -44,7 +44,7 @@ public class BuildCard : MonoBehaviour
     {
         cardName.text = names[repositoryPosition];
         cardDescription.text = cartText[repositoryPosition];
-        cardPoint.text = BuildCoeff().ToString();
+        cardPoint.text = (-BuildCoeff()).ToString();
     }
 
     public int BuildCoeff()

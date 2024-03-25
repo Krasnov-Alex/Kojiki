@@ -48,7 +48,7 @@ public class ExtractionCard : MonoBehaviour
     {
         cardName.text = names[repositoryPosition];
         cardDescription.text = cardText[repositoryPosition];
-        cardPoint1.text = ((int)((float)resCosts[repositoryPosition] * resManager.Coef(resTypes[repositoryPosition]))).ToString();
+        cardPoint1.text = ExtractionCoeff().ToString();
 
 
         switch (resTypes[repositoryPosition])
@@ -91,7 +91,10 @@ public class ExtractionCard : MonoBehaviour
                 }
                 break;
             case "Card1":
-
+                for (int i = 0; i < 5; i++)
+                {
+                    godControl.gods[i].SetSatisfaction(godControl.satisfactionTakeMinus + 1);
+                }
                 break;
         }
     }
