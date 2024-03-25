@@ -17,11 +17,6 @@ public class Season : MonoBehaviour
     public Text yearTXT;
     
 
-    // (2) весной коеф 1
-    // (3) летом коеф 1,25
-    // (4) осень коеф 1
-    // (1) зимой коеф 0,75
-
     public int debuffSeason = 100;
     public float winterDebuffCoef = 1.5f;
     public float springDebuffCoef = 1f;
@@ -29,29 +24,19 @@ public class Season : MonoBehaviour
     public float autumnDebuffCoef = 1f;
 
 
-
-    // winterCoef = debuddSeason * peopleCoef * 1.5
-    // springCoef = debuddSeason * peopleCoef * 1
-    // summerCoef = debuddSeason * peopleCoef * 0.5
-    // autumnCoef = debuddSeason * peopleCoef * 1
-
     public float springCoef = 1f;
     public float winterCoef = 0.75f;
     public float autumnCoef = 1f;
     public float summerCoef = 1.25f;
 
-    private Gamover gamover;
-    private GodControl godControl;
-    private BuildCard buildCard;
-    private ResManager resManager;
+    [SerializeField] private Gamover gamover;
+    [SerializeField] private GodControl godControl;
+    [SerializeField] private BuildCard buildCard;
+    [SerializeField] private ResManager resManager;
 
     private void Start()
     {
         SetSeason();
-        gamover = FindAnyObjectByType<Gamover>();
-        godControl = FindAnyObjectByType<GodControl>();
-        buildCard = FindAnyObjectByType<BuildCard>();
-        resManager = FindAnyObjectByType<ResManager>();
         yearTXT.text = year.ToString();
     }
 
@@ -86,13 +71,13 @@ public class Season : MonoBehaviour
         switch (atr)
         {
             case 1:
-                return (int)(debuffSeason * resManager.PeopleCoef() * winterDebuffCoef);
+                return (int)((float)debuffSeason * resManager.PeopleCoef() * winterDebuffCoef);
             case 2:
-                return (int)(debuffSeason * resManager.PeopleCoef() * springDebuffCoef);
+                return (int)((float)debuffSeason * resManager.PeopleCoef() * springDebuffCoef);
             case 3:
-                return (int)(debuffSeason * resManager.PeopleCoef() * summerDebuffCoef);
+                return (int)((float)debuffSeason * resManager.PeopleCoef() * summerDebuffCoef);
             case 4:
-                return (int)(debuffSeason * resManager.PeopleCoef() * autumnDebuffCoef);
+                return (int)((float)debuffSeason * resManager.PeopleCoef() * autumnDebuffCoef);
         }
         return 1;
         
@@ -156,7 +141,8 @@ public class Season : MonoBehaviour
                 return summerCoef;
             case 4:
                 return autumnCoef;
+            default:
+                return 1;
         }
-        return 1;
     }
 }

@@ -22,7 +22,7 @@ public class Card : MonoBehaviour
 
     private void Start()
     {
-        season = FindAnyObjectByType<Season>();
+        //season = FindAnyObjectByType<Season>();
     }
 
     public void UpdAnyCard()
@@ -31,6 +31,7 @@ public class Card : MonoBehaviour
         exchangeCard.UpdateCard();
         extractionCard.UpdateCard();
         season.CreateStep();
+                
     }
 
     public void CardVisible()

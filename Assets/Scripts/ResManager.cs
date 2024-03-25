@@ -13,17 +13,9 @@ public class ResManager : MonoBehaviour
     public int hap = 1000;
     public int man = 1000;
 
-
-    //private int materialResourcesNew;
-    //private int foodResourcesNew;
-    //private int happyResourcesNew;
-    //private int peopleResoursesLast = 1000;
-    //private int peopleCoef; // = peopleResoursesLast / 1000;
-    //private int peopleResourcesAdd = 500;
-
     private int peopleCoefConst = 1000;
-    // private int peopleCoef; // = peopleResoursesLast / 1000;
-    private int peopleResourcesAdd = 500;
+    //private int peopleResourcesAdd = 500;
+    public int buffConst = 50;
 
 
     private int materialBuild = 1;
@@ -46,12 +38,12 @@ public class ResManager : MonoBehaviour
     public Text manTXT;
     public Text debuffTXT;
 
-    private Season season;
+    public Season season;
 
     private void Start()
     {
-        season = FindAnyObjectByType<Season>();
-        gamover = FindAnyObjectByType<Gamover>();
+        //season = FindAnyObjectByType<Season>();
+        //gamover = FindAnyObjectByType<Gamover>();
         TextUpdate();
     }
 
@@ -67,17 +59,30 @@ public class ResManager : MonoBehaviour
     //      if cardTake = 1
     //        materialResourcesNew = materialResources + (((materialBuildNew * cardTakeNum) * peopleCoefNew) * seasonCoef); // новое количество ресурсов в зависимости от количества зданий этих ресурсов, выбора карточки добычи, множителя от населения и множителя сезона
 
-    public int Coef(string atr)
+
+    public float Coef(string atr)
     {
-        //return (int)1.5f;
-        return atr switch
+        
+        switch (atr)
         {
-            "Mat" => (int)((float)materialBuild * PeopleCoef()),
-            "Man" => (int)((float)peopleBuild * PeopleCoef()),
-            "Eat" => (int)((float)foodBuild * PeopleCoef()),
-            "Hap" => (int)((float)happyBuild * PeopleCoef()),
-            _ => 1,
-        };
+            case "Mat":
+                //Debug.Log("materialBuild " + materialBuild + " PeopleCoef " + PeopleCoef() + " SeasonCoef " + season.SeasonCoef());
+                return ((float)materialBuild * PeopleCoef() * season.SeasonCoef());
+            case "Man":
+                //Debug.Log("peopleBuild " + peopleBuild + " PeopleCoef " + PeopleCoef() + " SeasonCoef " + season.SeasonCoef());
+                return ((float)peopleBuild * PeopleCoef() * season.SeasonCoef());
+            case "Eat":
+                //Debug.Log("foodBuild " + foodBuild + " PeopleCoef " + PeopleCoef() + " SeasonCoef " + season.SeasonCoef());
+                return ((float)foodBuild * PeopleCoef() * season.SeasonCoef());
+            case "Hap":
+                //Debug.Log("happyBuild " + happyBuild + " PeopleCoef " + PeopleCoef() + " SeasonCoef " + season.SeasonCoef());
+                return ((float)happyBuild * PeopleCoef() * season.SeasonCoef());
+            default: 
+                return 1;
+        }
+
+        //return (int)1.5f;
+        
     }
 
     public float PeopleCoef()
@@ -94,23 +99,21 @@ public class ResManager : MonoBehaviour
     {
         if (material == "Eat")
         {
-            eat += (int)((float)cost * Coef(material));
+            eat += (int)((float)cost);
         }
         else if (material == "Mat")
         {
-            mat += (int)((float)cost * Coef(material));
+            mat += (int)((float)cost);
         }
         else if (material == "Hap")
         {
-            hap += (int)((float)cost * Coef(material));
+            hap += (int)((float)cost);
         }
         else if(material == "Man")
         {
-            man += (int)((float)cost * Coef(material));
+            man += (int)((float)cost);
         }
     }
-
-    
 
     public void SeasonSetRes(int atr)
     {
@@ -126,6 +129,23 @@ public class ResManager : MonoBehaviour
         matTXT.text = mat.ToString();
         manTXT.text = man.ToString();
         debuffTXT.text = season.SeasonDebuff(season.seasonNow).ToString();
+    }
+
+    public int ReturnCountBuilds(string atr)
+    {
+        switch (atr)
+        {
+            case "Mat":
+                return materialBuild;
+            case "Man":
+                return peopleBuild;
+            case "Eat":
+                return foodBuild;
+            case "Hap":
+                return happyBuild;
+            default:
+                return 1;
+        }
     }
 
     public void AddBuild(string atr)
@@ -167,6 +187,7 @@ public class ResManager : MonoBehaviour
                 break;
             case "Man":
                 peopleBuild++;
+                SetRes("Man", (int)(500f/Coef("Man")));
                 break;
 
         }
