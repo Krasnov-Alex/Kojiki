@@ -3,7 +3,18 @@ guid: 4b7842b9ddee4ec49bfa2db5dc473f8c
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - seasonImg: {instanceID: 0}
+  - summer: {fileID: 21300000, guid: 065a6ad124bb05b4bad46634d4044120, type: 3}
+  - autumn: {fileID: 21300000, guid: de27f72f66b02514b8f88238a27f28be, type: 3}
+  - spring: {fileID: 21300000, guid: 9de4f4116f02ca84c8ba79440ee3a6d8, type: 3}
+  - winter: {fileID: 21300000, guid: 1ca06b28dbfdcd64aa8e98d0e9e96db9, type: 3}
+  - yearTXT: {instanceID: 0}
+  - gamover: {instanceID: 0}
+  - godControl: {instanceID: 0}
+  - buildCard: {instanceID: 0}
+  - resManager: {instanceID: 0}
+  - godLog: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

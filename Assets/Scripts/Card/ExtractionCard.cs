@@ -10,10 +10,11 @@ public class ExtractionCard : MonoBehaviour
     public string[] cardText;
     public string[] resTypes;
     public int[] resCosts;
+    public string[] cardAtr;
     public int resCost = 1;
-    public string nameRes = "Mat";
     private int random;
     public Card card;
+    [SerializeField] private Season season;
 
     public Image resSprite;
     public Sprite material;
@@ -22,36 +23,32 @@ public class ExtractionCard : MonoBehaviour
     public Sprite people;
 
     public ResManager resManager;
-    private GodControl godControl;
+    [SerializeField] private GodControl godControl;
     public GameObject ground;
     public GameObject house;
     public int count = 4;
 
+    [SerializeField] private Text cardName;
+    [SerializeField] private Text cardDescription;
+    [SerializeField] private Text cardPoint1;
+    [SerializeField] private GodLog godLog;
+    [SerializeField] private CardDesription description;
+
     private void Start()
     {
         UpdateCard();
-        resManager = FindAnyObjectByType<ResManager>();
-        godControl = FindAnyObjectByType<GodControl>();
-        SetText();
     }
 
-    private void Update()
+    public void SetText()
     {
-        //SetText();
+        cardName.text = names[repositoryPosition];
+        cardDescription.text = cardText[repositoryPosition];
+        cardPoint1.text = ("+" + ExtractionCoeff().ToString());
+        SetSprite();
     }
-    private void SetText()
+
+    private void SetSprite()
     {
-        GameObject TextCart;
-
-        TextCart = this.gameObject.transform.GetChild(3).gameObject;
-        TextCart.GetComponent<Text>().text = names[repositoryPosition];
-
-        TextCart = this.gameObject.transform.GetChild(1).gameObject;
-        TextCart.GetComponent<Text>().text = cardText[repositoryPosition];
-
-        TextCart = this.gameObject.transform.GetChild(2).gameObject;
-        TextCart.GetComponent<Text>().text = (resCosts[repositoryPosition] * resManager.ExtractionCoef(resTypes[repositoryPosition])).ToString();
-
         switch (resTypes[repositoryPosition])
         {
             case "Mat":
@@ -69,11 +66,41 @@ public class ExtractionCard : MonoBehaviour
         }
     }
 
+    private int ExtractionCoeff()
+    {
+        return (int)((float)resCosts[repositoryPosition] + ((float)resManager.buffConst * ((float)resManager.ReturnCountBuilds(resTypes[repositoryPosition]) - 1) * season.SeasonCoef() * resManager.PeopleCoef()));
+    }
+
     public void Extraction()
     {
-        resManager.SetRes(nameRes, resCosts[repositoryPosition] * resManager.ExtractionCoef(resTypes[repositoryPosition]));
+        resManager.SetRes(resTypes[repositoryPosition], ExtractionCoeff());
+        godLog.ExtractionCard(names[repositoryPosition], ExtractionCoeff(), ReturnRes());
+        SetSatisfactionEx();
         card.UpdAnyCard();
-        for (int i = 0; i < godControl.locate;  i++)
+        description.ReExtraction();
+    }
+
+    private string ReturnRes()
+    {
+        switch (resTypes[repositoryPosition])
+        {
+            case "Mat":
+                return "материалов";
+            case "Eat":
+                return "пищи";
+            case "Hap":
+                return "счастья";
+            case "Man":
+                return "людей";
+            default:
+                return $"какой-то баг{resTypes[repositoryPosition]}";
+
+        }
+    }
+
+    private void SetSatisfactionEx()
+    {
+        for (int i = 0; i < 5; i++)
         {
             godControl.gods[i].SetSatisfaction(godControl.satisfactionTakeMinus);
         }
@@ -81,9 +108,36 @@ public class ExtractionCard : MonoBehaviour
 
     public void UpdateCard()
     {
-        random = Random.Range(0, 15);
+        int[] values = { 0, 1, 2, 2, 3, 3, 4, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12, 13, 13, 14, 14 };
+        random = values[Random.Range(0, values.Length)];
         repositoryPosition = random;
-        nameRes = resTypes[repositoryPosition];
         SetText();
+    }
+
+    public string ReturnResName()
+    {
+        return resTypes[repositoryPosition];
+    }
+
+    public int ReturnResCost()
+    {
+        return ExtractionCoeff();
+    }
+
+    public int ReturnResMean()
+    {
+        switch (resTypes[repositoryPosition])
+        {
+            case "Mat":
+                return resManager.mat;
+            case "Eat":
+                return resManager.eat;
+            case "Hap":
+                return resManager.hap;
+            case "Man":
+                return resManager.man;
+            default:
+                return -1;
+        }
     }
 }

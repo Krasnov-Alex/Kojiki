@@ -16,7 +16,11 @@ public class ExchangeCard : MonoBehaviour
     private int random;
     public Card card;
     private GodSatisfaction godSatisfaction;
-    private GodControl godControl;
+    [SerializeField] private GodControl godControl;
+
+    [SerializeField] private Text pointRes1TXT;
+    [SerializeField] private Text pointRes2TXT;
+    [SerializeField] private Season season;
 
     public Image resSprite1;
     public Image resSprite2;
@@ -24,14 +28,19 @@ public class ExchangeCard : MonoBehaviour
     public Sprite eat;
     public Sprite happy;
     public Sprite people;
+    public Sprite emptySpr;
+
+    [SerializeField] private Text cardName;
+    [SerializeField] private Text cardDescription;
+    [SerializeField] private GodLog godLog;
+    [SerializeField] private CardDesription description;
 
     public ResManager resManager;
     public int count = 4;
 
     private void Start()
     {
-        resManager = FindAnyObjectByType<ResManager>();
-        godControl = FindAnyObjectByType<GodControl>();
+        //resManager = FindAnyObjectByType<ResManager>();
         UpdateCard();
     }
 
@@ -39,22 +48,18 @@ public class ExchangeCard : MonoBehaviour
     {
         //SetText();
     }
-    private void SetText()
+    public void SetText()
     {
-        GameObject TextCart;
+        cardName.text = names[repositoryPosition];
+        cardDescription.text = cardText[repositoryPosition];
+        pointRes1TXT.text = AddRes().ToString();
+        pointRes2TXT.text = ("+" + OutRes().ToString());
+        SetSprite();
+        
+    }
 
-        TextCart = this.gameObject.transform.GetChild(3).gameObject;
-        TextCart.GetComponent<Text>().text = names[repositoryPosition];
-
-        TextCart = this.gameObject.transform.GetChild(1).gameObject;
-        TextCart.GetComponent<Text>().text = cardText[repositoryPosition];
-
-        TextCart = this.gameObject.transform.GetChild(2).gameObject;
-        TextCart.GetComponent<Text>().text = (resCost1[repositoryPosition] * -1).ToString();
-
-        TextCart = this.gameObject.transform.GetChild(4).gameObject;
-        TextCart.GetComponent<Text>().text = resCost2[repositoryPosition].ToString();
-
+    private void SetSprite()
+    {
         switch (resTypes1[repositoryPosition])
         {
             case "Mat":
@@ -70,34 +75,93 @@ public class ExchangeCard : MonoBehaviour
                 resSprite1.sprite = eat;
                 break;
         }
-        switch (resTypes2[repositoryPosition])
+
+        switch (cardAtr[repositoryPosition])
         {
-            case "Mat":
-                resSprite2.sprite = material;
+            case "Atr17":
+                resSprite2.sprite = emptySpr;
+                pointRes2TXT.text = "";
                 break;
-            case "Hap":
-                resSprite2.sprite = happy;
+            case "Atr18":
+                resSprite2.sprite = emptySpr;
+                pointRes2TXT.text = "";
                 break;
-            case "Man":
-                resSprite2.sprite = people;
+            case "Atr19":
+                resSprite2.sprite = emptySpr;
+                pointRes2TXT.text = "";
                 break;
-            case "Eat":
-                resSprite2.sprite = eat;
+            case "Atr20":
+                resSprite2.sprite = emptySpr;
+                pointRes2TXT.text = "";
+                break;
+            case "Atr21":
+                resSprite2.sprite = emptySpr;
+                pointRes2TXT.text = "";
+                break;
+            default:
+                switch (resTypes2[repositoryPosition])
+                {
+                    case "Mat":
+                        resSprite2.sprite = material;
+                        break;
+                    case "Hap":
+                        resSprite2.sprite = happy;
+                        break;
+                    case "Man":
+                        resSprite2.sprite = people;
+                        break;
+                    case "Eat":
+                        resSprite2.sprite = eat;
+                        break;
+                }
                 break;
         }
+        
     }
+
+    private int AddRes()
+    {
+        return (int)((float)resCost1[repositoryPosition] - ((float)resManager.buffConst * season.SeasonCoef() * resManager.PeopleCoef()));
+    }
+
+    private int OutRes()
+    {
+        return (int)((float)resCost2[repositoryPosition] + ((float)resManager.buffConst * season.SeasonCoef() * resManager.PeopleCoef()));
+    }
+
+    
 
     public void Exchange()
     {
         TakeGods(cardAtr[repositoryPosition]);
-        resManager.SetRes(resTypes2[repositoryPosition], resCost1[repositoryPosition] * -1);
-        resManager.SetRes(resTypes1[repositoryPosition], resCost2[repositoryPosition]);
+        godLog.ExchangeCard(names[repositoryPosition], ReturnRes(OutRes(), resTypes2[repositoryPosition]),  ReturnRes(AddRes(), resTypes1[repositoryPosition]));
+        resManager.SetRes(resTypes1[repositoryPosition], AddRes());
+        resManager.SetRes(resTypes2[repositoryPosition], OutRes());
         card.UpdAnyCard();
+        description.ReExchange();
+    }
+
+    private string ReturnRes(int num, string atr)
+    {
+        switch (atr)
+        {
+            case "Mat":
+                return $"{num} материалов";
+            case "Eat":
+                return $"{num} пищи";
+            case "Hap":
+                return $"{num} счастья";
+            case "Man":
+                return $"{num} людей";
+            default:
+                return "удовлетворенность для богов";
+
+        }
     }
 
     public void UpdateCard()
     {
-        random = Random.Range(0, 18);
+        random = Random.Range(0, 21);
         repositoryPosition = random;
         SetText();
     }
@@ -107,71 +171,154 @@ public class ExchangeCard : MonoBehaviour
         switch (atr)
         {
             case "Atr1":
-                CheckAndSetSatisfaction("God1", 2);
+                CheckAndSetSatisfactionEx("God1", 2);
+                CheckAndSetSatisfactionEx("God5", -2);
                 break;
             case "Atr2":
+                CheckAndSetSatisfactionEx("God1", 2);
+                CheckAndSetSatisfactionEx("God5", -2);
                 break;
             case "Atr3":
-                CheckAndSetSatisfaction("God4", 2);
+                CheckAndSetSatisfactionEx("God2", -2);
+                CheckAndSetSatisfactionEx("God5", 2);
                 break;
             case "Atr4":
-                CheckAndSetSatisfaction("God7", -2);
+                CheckAndSetSatisfactionEx("God2", -2);
+                CheckAndSetSatisfactionEx("God3", 2);
                 break;
             case "Atr5":
-                CheckAndSetSatisfaction("God2", 2);
+                CheckAndSetSatisfactionEx("God2", 2);
+                CheckAndSetSatisfactionEx("God4", -2);
                 break;
             case "Atr6":
-                CheckAndSetSatisfaction("God6", -2);
+                CheckAndSetSatisfactionEx("God2", 2);
+                CheckAndSetSatisfactionEx("God3", -2);
                 break;
             case "Atr7":
+                CheckAndSetSatisfactionEx("God4", -2);
+                CheckAndSetSatisfactionEx("God5", 2);
                 break;
             case "Atr8":
-                CheckAndSetSatisfaction("God7", 2);
+                CheckAndSetSatisfactionEx("God1", 2);
+                CheckAndSetSatisfactionEx("God4", -2);
                 break;
             case "Atr9":
-                CheckAndSetSatisfaction("God5", -2);
+                CheckAndSetSatisfactionEx("God3", -2);
+                CheckAndSetSatisfactionEx("God4", 2);
                 break;
             case "Atr10":
-                CheckAndSetSatisfaction("God2", -2);
+                CheckAndSetSatisfactionEx("God1", -2);
+                CheckAndSetSatisfactionEx("God5", 2);
                 break;
             case "Atr11":
+                CheckAndSetSatisfactionEx("God2", -2);
+                CheckAndSetSatisfactionEx("God3", 2);
                 break;
             case "Atr12":
-                CheckAndSetSatisfaction("God1", -2);
+                CheckAndSetSatisfactionEx("God1", -2);
+                CheckAndSetSatisfactionEx("God4", 2);
                 break;
             case "Atr13":
-                CheckAndSetSatisfaction("God8", 2);
+                CheckAndSetSatisfactionEx("God1", -2);
+                CheckAndSetSatisfactionEx("God4", 2);
                 break;
             case "Atr14":
-                CheckAndSetSatisfaction("God3", -2);
+                CheckAndSetSatisfactionEx("God2", 2);
+                CheckAndSetSatisfactionEx("God3", -2);
                 break;
             case "Atr15":
+                CheckAndSetSatisfactionEx("God2", 2);
+                CheckAndSetSatisfactionEx("God5", -2);
                 break;
             case "Atr16":
-                CheckAndSetSatisfaction("God4", -2);
+                CheckAndSetSatisfactionEx("God2", -2);
+                CheckAndSetSatisfactionEx("God3", 2);
                 break;
             case "Atr17":
-                CheckAndSetSatisfaction("God3", 2);
+                CheckAndSetSatisfactionEx("God1", 3);
+                CheckAndSetSatisfactionEx("God5", -3);
                 break;
             case "Atr18":
-                CheckAndSetSatisfaction("God5", 2);
+                CheckAndSetSatisfactionEx("God2", 3);
+                CheckAndSetSatisfactionEx("God3", -3);
                 break;
             case "Atr19":
-                CheckAndSetSatisfaction("God8", -2);
+                CheckAndSetSatisfactionEx("God3", 3);
+                CheckAndSetSatisfactionEx("God4", -3);
                 break;
             case "Atr20":
-                CheckAndSetSatisfaction("God6", 2);
+                CheckAndSetSatisfactionEx("God2", -3);
+                CheckAndSetSatisfactionEx("God4", 3);
                 break;
+            case "Atr21":
+                CheckAndSetSatisfactionEx("God1", -3);
+                CheckAndSetSatisfactionEx("God5", 3);
+                break;
+
         }
     }
 
-    private void CheckAndSetSatisfaction(string atr, int satis)
+    private void CheckAndSetSatisfactionEx(string atr, int satis)
     {
-        if (godControl.FindGods(atr) != null)
+        godSatisfaction = godControl.FindGods(atr);
+        if (godSatisfaction != null)
         {
-            godSatisfaction = godControl.FindGods(atr);
             godSatisfaction.SetSatisfaction(satis);
         }
         godSatisfaction = null;
+    }
+
+    public string ReturnOutResName()
+    {
+        return resTypes1[repositoryPosition];
+    }
+
+    public string ReturnAddResName()
+    {
+        return resTypes2[repositoryPosition];
+    }
+
+    public int ReturnOutResCost()
+    {
+        return AddRes();
+    }
+
+    public int ReturnAddResCost()
+    {
+        return OutRes();
+    }
+
+    public int ReturnOutResMean()
+    {
+        switch (resTypes1[repositoryPosition])
+        {
+            case "Mat":
+                return resManager.mat;
+            case "Eat":
+                return resManager.eat;
+            case "Hap":
+                return resManager.hap;
+            case "Man":
+                return resManager.man;
+            default:
+                return -1;
+        }
+    }
+
+    public int ReturnAddResMean()
+    {
+        switch (resTypes2[repositoryPosition])
+        {
+            case "Mat":
+                return resManager.mat;
+            case "Eat":
+                return resManager.eat;
+            case "Hap":
+                return resManager.hap;
+            case "Man":
+                return resManager.man;
+            default:
+                return -1;
+        }
     }
 }
