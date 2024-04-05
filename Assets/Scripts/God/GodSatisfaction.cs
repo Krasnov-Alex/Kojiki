@@ -5,33 +5,53 @@ using UnityEngine.UI;
 
 public class GodSatisfaction : MonoBehaviour
 {
-    [SerializeField] private Image icon;
-    [SerializeField] private Text godName; 
+    [SerializeField] public Text godName; 
     [SerializeField] public float satisfaction = 0f;
-    [SerializeField] private Text godDescription;
+    [SerializeField] private GameObject godDescription;
+    [SerializeField] private Text godDescriptionText;
     [SerializeField] private Sprite[] iconEx;
     [SerializeField] private string[] godNameEx;
-    [SerializeField] private string[] godDescriptionEx;
-    private GodControl godControl;
+    private string[] godDescriptionEx = new string[5];
+    [SerializeField]private GodControl godControl;
+    [SerializeField] private Gamover gamover;
+    [SerializeField] private string atribut;
+    [SerializeField] private Slider goodLine;
+    [SerializeField] private Slider badLine;
     private int minSatis = -30;
     private int maxSatis = 30;
-    public string atribut;
-    public Slider badLine;
-    public Slider goodLine;
     public Text satis;
-    private Gamover gamover;
+    
 
     private void Start()
     {
-        gamover = FindAnyObjectByType<Gamover>();
-        godControl = FindAnyObjectByType<GodControl>();
-        goodLine.normalizedValue = satisfaction;
-        badLine.value = satisfaction;
+        AddDescription();
+        GetDescription();
+        goodLine.value = 0;
+        badLine.value = 0;
     }
 
     private void Update()
     {
         satis.text = satisfaction.ToString();
+
+        if (satisfaction < 0)
+        {
+            badLine.value = -(float)satisfaction / 30f;
+            goodLine.value = 0;
+        }
+        else if (satisfaction > 0)
+        {
+            goodLine.value = (float)satisfaction / 30f;
+            badLine.value = 0;
+        }
+        else
+        {
+            goodLine.value = 0;
+            badLine.value = 0;
+        }
+        
+        
+
         if (satisfaction <= minSatis)
         {
             gamover.GameOver(false);
@@ -47,61 +67,46 @@ public class GodSatisfaction : MonoBehaviour
         satisfaction += satis;
     }
 
-    public void SetDisplay(string atr)
+    public void GodDescription()
     {
-        switch (atr)
+        if (godDescription.activeSelf)
         {
-            case "God1":
-                icon.sprite = iconEx[0];
-                godName.text = godNameEx[0];
-                godDescription.text = godDescriptionEx[0];
-                atribut = "God1"; 
-                break;
-            case "God2":
-                icon.sprite = iconEx[1];
-                godName.text = godNameEx[1];
-                godDescription.text = godDescriptionEx[1];
-                atribut = "God2";
-                break;
-            case "God3":
-                icon.sprite = iconEx[2];
-                godName.text = godNameEx[2];
-                godDescription.text = godDescriptionEx[2];
-                atribut = "God3";
-                break;
-            case "God4":
-                icon.sprite = iconEx[3];
-                godName.text = godNameEx[3];
-                godDescription.text = godDescriptionEx[3];
-                atribut = "God4";
-                break;
-            case "God5":
-                icon.sprite = iconEx[4];
-                godName.text = godNameEx[4];
-                godDescription.text = godDescriptionEx[4];
-                atribut = "God5";
-                break;
-            case "God6":
-                icon.sprite = iconEx[5];
-                godName.text = godNameEx[5];
-                godDescription.text = godDescriptionEx[5];
-                atribut = "God6";
-                break;
-            case "God7":
-                icon.sprite = iconEx[6];
-                godName.text = godNameEx[6];
-                godDescription.text = godDescriptionEx[6];
-                atribut = "God7";
-                break;
-            case "God8":
-                icon.sprite = iconEx[7];
-                godName.text = godNameEx[7];
-                godDescription.text = godDescriptionEx[7];
-                atribut = "God8";
-                break;
-
+            godDescription.SetActive(false);
+        }
+        else
+        {
+            godDescription.SetActive(true);
         }
     }
 
+    private void GetDescription()
+    {
+        switch (atribut)
+        {
+            case "Ig":
+                godDescriptionText.text = godDescriptionEx[0];
+                break;
+            case "Im":
+                godDescriptionText.text = godDescriptionEx[1];
+                break;
+            case "Am":
+                godDescriptionText.text = godDescriptionEx[2];
+                break;
+            case "Ts":
+                godDescriptionText.text = godDescriptionEx[3];
+                break;
+            case "Su":
+                godDescriptionText.text = godDescriptionEx[4];
+                break;
+        }
+    }
 
+    private void AddDescription()
+    {
+        godDescriptionEx[0] = "Идзанаги.\r\nИзначальный Бог. Брат и муж Идзанами. Волевой и импульсивный. Радуется, когда деревня процветает, и огорчается, когда кто-то погибает.\r\n";
+        godDescriptionEx[1] = "Идзанами.\r\nИзначальная Богиня. Жена и сестра Идзанаги. Мягкая, но при этом мстительная. Радуется, когда население растет, и огорчается, когда население снижается.\r\n";
+        godDescriptionEx[2] = "Аматерасу.\r\nИзначальный Бог. Брат и муж Идзанами. Волевой и импульсивный. Радуется, когда деревня процветает, и огорчается, когда кто-то погибает.\r\n";
+        godDescriptionEx[3] = "Цукуёми.\r\nБог ночи. Сын Идзанаги и Идзанами. Нелюдим. Замкнут. И поэтому даже родственники не знают, что его радует, а что огорчает.\r\n";
+        godDescriptionEx[4] = "Сусаноо.\r\nБог стихийных бедствий. Сын Идзанаги и Идзанами. Сам лентяй, но радуется, когда что-то достается с большим трудом, и огорчается, если все дается легко.\r\n";
+    }
 }

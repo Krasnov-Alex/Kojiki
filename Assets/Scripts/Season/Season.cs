@@ -10,67 +10,164 @@ public class Season : MonoBehaviour
     [SerializeField] private Sprite autumn;
     [SerializeField] private Sprite spring;
     [SerializeField] private Sprite winter;
-    private bool isGodSeason = false;
+    [SerializeField] private Card card;
     public int year = 1; 
     public int month = 1;
+    public int seasonNow = 1;
+
     public Text yearTXT;
+    
+
+    public int debuffSeason = 100;
+    public float winterDebuffCoef = 1.5f;
+    public float springDebuffCoef = 1f;
+    public float summerDebuffCoef = 0.5f;
+    public float autumnDebuffCoef = 1f;
 
 
-    private Gamover gamover;
-    private GodControl godControl;
-    private BuildCard buildCard;
+    public float springCoef = 1f;
+    public float winterCoef = 0.75f;
+    public float autumnCoef = 1f;
+    public float summerCoef = 1.25f;
+
+    [SerializeField] private Gamover gamover;
+    [SerializeField] private GodControl godControl;
+    [SerializeField] private BuildCard buildCard;
+    [SerializeField] private ResManager resManager;
+    [SerializeField] private GodLog godLog;
 
     private void Start()
     {
         SetSeason();
-        gamover = FindAnyObjectByType<Gamover>();
-        godControl = FindAnyObjectByType<GodControl>();
-        buildCard = FindAnyObjectByType<BuildCard>();
         yearTXT.text = year.ToString();
     }
 
     public void CreateStep()
     {
         month++;
-        if (((float)month -1) % 12 == 0)
+        if (((float)month -1) % 24 == 0)
         {
             year++;
             month = 1;
             yearTXT.text = year.ToString();
         }
+        CheckAndDebuffSeason();
         SetSeason();
-        if (year == 10)
+        if (year == 5)
         {
             gamover.GameOver(true);
         }
+    }
 
-        if (month == 6 && !isGodSeason)
+    public void CheckAndDebuffSeason()
+    {
+        if (seasonNow != GetSeason())
         {
-            godControl.SetGod("God3");
-            godControl.SetGod("God4");
-            buildCard.AddGod(3);
-            buildCard.AddGod(4);
-            isGodSeason = true;
+            godLog.SeasonWriteOff(SeasonDebuff(seasonNow));
+            resManager.SeasonSetRes(SeasonDebuff(seasonNow));
+            seasonNow = GetSeason();
+            card.UpdateCardText();
         }
+        else
+        {
+            godLog.SeasonWriteOff(0);
+        }
+    }
+
+    public int SeasonDebuff(int atr)
+    {
+        switch (atr)
+        {
+            case 1:
+                return (int)((float)debuffSeason * resManager.PeopleCoef() * winterDebuffCoef);
+            case 2:
+                return (int)((float)debuffSeason * resManager.PeopleCoef() * springDebuffCoef);
+            case 3:
+                return (int)((float)debuffSeason * resManager.PeopleCoef() * summerDebuffCoef);
+            case 4:
+                return (int)((float)debuffSeason * resManager.PeopleCoef() * autumnDebuffCoef);
+        }
+        return 1;
+        
     }
 
     private void SetSeason()
     {
-        if (month == 12 || month <= 2)
+        switch (GetSeason())
         {
-            seasonImg.sprite = winter;
+            case 1:
+                seasonImg.sprite = winter;
+                break;
+            case 2:
+                seasonImg.sprite = spring;
+                break;
+            case 3:
+                seasonImg.sprite = summer;
+                break;
+            case 4:
+                seasonImg.sprite = autumn;
+                break;
         }
-        else if (month >= 3 && month <= 5)
+    }
+
+    private int GetSeason()
+    {
+        if (month == 23 || month == 24 || month <= 4)
         {
-            seasonImg.sprite = spring;
+            return 1;
         }
-        else if (month >= 6 && month <= 8)
+        else if (month >= 5 && month <= 10)
         {
-            seasonImg.sprite = summer;
+            return 2;
         }
-        else if (month >= 9 && month <= 11)
+        else if (month >= 11 && month <= 16)
         {
-            seasonImg.sprite = autumn;
+            return 3;
+        }
+        else if (month >= 17 && month <= 22)
+        {
+            return 4;
+        }
+        return 1;
+    }
+
+    // (1) зимой коеф 0,75
+    // (2) весной коеф 1
+    // (3) летом коеф 1,25
+    // (4) осень коеф 1
+
+
+    public float SeasonCoef()
+    {
+        switch (GetSeason())
+        {
+            case 1:
+                return winterCoef;
+            case 2:
+                return springCoef;
+            case 3:
+                return summerCoef;
+            case 4:
+                return autumnCoef;
+            default:
+                return 1;
+        }
+    }
+
+    public string GetSeasonName()
+    {
+        switch (GetSeason())
+        {
+            case 1:
+                return "Зима.";
+            case 2:
+                return "Весна.";
+            case 3:
+                return "Лето.";
+            case 4:
+                return "Осень.";
+            default:
+                return "";
         }
     }
 }
