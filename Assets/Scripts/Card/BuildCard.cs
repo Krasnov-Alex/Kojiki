@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static UnityEngine.UIElements.UxmlAttributeDescription;
 
@@ -28,6 +29,8 @@ public class BuildCard : MonoBehaviour
     [SerializeField] private Text cardName;
     [SerializeField] private Text cardDescription;
     [SerializeField] private Text cardPoint;
+    [SerializeField] private GodLog godLog;
+    [SerializeField] private BuildCount buildCount;
 
     private void Start()
     {
@@ -39,8 +42,9 @@ public class BuildCard : MonoBehaviour
         SetText();
     }
 
-    
-    private void SetText()
+
+
+    public void SetText()
     {
         cardName.text = names[repositoryPosition];
         cardDescription.text = cartText[repositoryPosition];
@@ -49,13 +53,14 @@ public class BuildCard : MonoBehaviour
 
     public int BuildCoeff()
     {
-        return -(int)((float)buildCost + ((float)resManager.buffConst * resManager.PeopleCoef()));
+        return -(int)((float)buildCost - ((float)resManager.buffConst * resManager.PeopleCoef()));
     }
 
     public void Build()
     {
         TakeGods(cardAtr[repositoryPosition]);
         NewBuildAdd();
+        godLog.BuildCard(names[repositoryPosition], -BuildCoeff());
         resManager.SetRes(houseMat, -BuildCoeff());
         resManager.AddBuild(typeHouse[repositoryPosition]);
         card.UpdAnyCard();
@@ -117,53 +122,79 @@ public class BuildCard : MonoBehaviour
             case "God1":
                 CheckAndSetSatisfaction(atr, 10);
                 CheckAndSetSatisfaction("God5", -5);
+                buildCount.templeIg++;
+                buildCount.AddBuild();
                 break;
             case "God2":
                 CheckAndSetSatisfaction(atr, 10);
                 CheckAndSetSatisfaction("God3", -5);
+                buildCount.templeIm++;
+                buildCount.AddBuild();
                 break;
             case "God3":
                 CheckAndSetSatisfaction(atr, 10);
                 CheckAndSetSatisfaction("God4", -5);
+                buildCount.templeAm++;
+                buildCount.AddBuild();
                 break;
             case "God4":
                 CheckAndSetSatisfaction(atr, 10);
                 CheckAndSetSatisfaction("God2", -5);
+                buildCount.templeCu++;
+                buildCount.AddBuild();
                 break;
             case "God5":
                 CheckAndSetSatisfaction(atr, 10);
                 CheckAndSetSatisfaction("God1", -5);
+                buildCount.templeSu++;
+                buildCount.AddBuild();
                 break;
             case "God11":
                 CheckAndSetSatisfaction("God3", 5);
+                buildCount.kazarmaBuild++;
+                buildCount.AddBuild();
                 break;
             case "God21":
                 CheckAndSetSatisfaction("God2", 5);
+                buildCount.lifeDomBuild++;
+                buildCount.AddBuild();
                 break;
             case "God31":
                 CheckAndSetSatisfaction("God1", 5);
+                buildCount.baniBuild++;
+                buildCount.AddBuild();
                 break;
             case "God41":
                 CheckAndSetSatisfaction("God1", 1);
                 CheckAndSetSatisfaction("God2", 1);
                 CheckAndSetSatisfaction("God5", 1);
                 CheckAndSetSatisfaction("God4", 2);
+                buildCount.theaterBuild++;
+                buildCount.AddBuild();
                 break;
             case "God51":
                 CheckAndSetSatisfaction("God3", 1);
                 CheckAndSetSatisfaction("God1", 2);
                 CheckAndSetSatisfaction("God2", 2);
+                buildCount.riceFieldBuild++;
+                buildCount.AddBuild();
                 break;
             case "God61":
                 CheckAndSetSatisfaction("God5", 5);
+                buildCount.wellBuild++;
+                buildCount.AddBuild();
                 break;
             case "God71":
                 CheckAndSetSatisfaction("God4", 5);
+                buildCount.quarriesBuild++;
+                buildCount.AddBuild();
                 break;
             case "God81":
                 CheckAndSetSatisfaction("God5", 2);
                 CheckAndSetSatisfaction("God4", 1);
                 CheckAndSetSatisfaction("God3", 2);
+                buildCount.sawBuild++;
+                buildCount.AddBuild();
                 break;
         }
     }

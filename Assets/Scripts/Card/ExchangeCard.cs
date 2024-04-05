@@ -32,8 +32,8 @@ public class ExchangeCard : MonoBehaviour
 
     [SerializeField] private Text cardName;
     [SerializeField] private Text cardDescription;
-    //[SerializeField] private Text cardPoint1;
-    //[SerializeField] private Text cardPoint2;
+    [SerializeField] private GodLog godLog;
+    [SerializeField] private CardDesription description;
 
     public ResManager resManager;
     public int count = 4;
@@ -48,13 +48,18 @@ public class ExchangeCard : MonoBehaviour
     {
         //SetText();
     }
-    private void SetText()
+    public void SetText()
     {
         cardName.text = names[repositoryPosition];
         cardDescription.text = cardText[repositoryPosition];
         pointRes1TXT.text = AddRes().ToString();
-        pointRes2TXT.text = OutRes().ToString();
+        pointRes2TXT.text = ("+" + OutRes().ToString());
+        SetSprite();
+        
+    }
 
+    private void SetSprite()
+    {
         switch (resTypes1[repositoryPosition])
         {
             case "Mat":
@@ -116,12 +121,12 @@ public class ExchangeCard : MonoBehaviour
 
     private int AddRes()
     {
-        return (int)((float)resCost1[repositoryPosition] + ((float)resManager.buffConst * season.SeasonCoef() * resManager.PeopleCoef()));
+        return (int)((float)resCost1[repositoryPosition] - ((float)resManager.buffConst * season.SeasonCoef() * resManager.PeopleCoef()));
     }
 
     private int OutRes()
     {
-        return (int)((float)resCost2[repositoryPosition] - ((float)resManager.buffConst * season.SeasonCoef() * resManager.PeopleCoef()));
+        return (int)((float)resCost2[repositoryPosition] + ((float)resManager.buffConst * season.SeasonCoef() * resManager.PeopleCoef()));
     }
 
     
@@ -129,9 +134,29 @@ public class ExchangeCard : MonoBehaviour
     public void Exchange()
     {
         TakeGods(cardAtr[repositoryPosition]);
+        godLog.ExchangeCard(names[repositoryPosition], ReturnRes(OutRes(), resTypes2[repositoryPosition]),  ReturnRes(AddRes(), resTypes1[repositoryPosition]));
         resManager.SetRes(resTypes1[repositoryPosition], AddRes());
         resManager.SetRes(resTypes2[repositoryPosition], OutRes());
         card.UpdAnyCard();
+        description.ReExchange();
+    }
+
+    private string ReturnRes(int num, string atr)
+    {
+        switch (atr)
+        {
+            case "Mat":
+                return $"{num} материалов";
+            case "Eat":
+                return $"{num} пищи";
+            case "Hap":
+                return $"{num} счастья";
+            case "Man":
+                return $"{num} людей";
+            default:
+                return "удовлетворенность для богов";
+
+        }
     }
 
     public void UpdateCard()
@@ -241,5 +266,59 @@ public class ExchangeCard : MonoBehaviour
             godSatisfaction.SetSatisfaction(satis);
         }
         godSatisfaction = null;
+    }
+
+    public string ReturnOutResName()
+    {
+        return resTypes1[repositoryPosition];
+    }
+
+    public string ReturnAddResName()
+    {
+        return resTypes2[repositoryPosition];
+    }
+
+    public int ReturnOutResCost()
+    {
+        return AddRes();
+    }
+
+    public int ReturnAddResCost()
+    {
+        return OutRes();
+    }
+
+    public int ReturnOutResMean()
+    {
+        switch (resTypes1[repositoryPosition])
+        {
+            case "Mat":
+                return resManager.mat;
+            case "Eat":
+                return resManager.eat;
+            case "Hap":
+                return resManager.hap;
+            case "Man":
+                return resManager.man;
+            default:
+                return -1;
+        }
+    }
+
+    public int ReturnAddResMean()
+    {
+        switch (resTypes2[repositoryPosition])
+        {
+            case "Mat":
+                return resManager.mat;
+            case "Eat":
+                return resManager.eat;
+            case "Hap":
+                return resManager.hap;
+            case "Man":
+                return resManager.man;
+            default:
+                return -1;
+        }
     }
 }

@@ -22,7 +22,13 @@ public class Card : MonoBehaviour
 
     private void Start()
     {
-        //season = FindAnyObjectByType<Season>();
+    }
+
+    public void UpdateCardText()
+    {
+        buildCard.SetText();
+        exchangeCard.SetText();
+        extractionCard.SetText();
     }
 
     public void UpdAnyCard()

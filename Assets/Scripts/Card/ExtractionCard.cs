@@ -31,26 +31,24 @@ public class ExtractionCard : MonoBehaviour
     [SerializeField] private Text cardName;
     [SerializeField] private Text cardDescription;
     [SerializeField] private Text cardPoint1;
+    [SerializeField] private GodLog godLog;
+    [SerializeField] private CardDesription description;
 
     private void Start()
     {
         UpdateCard();
-        //resManager = FindAnyObjectByType<ResManager>();
-        //godControl = FindAnyObjectByType<GodControl>();
-        SetText();
     }
 
-    private void Update()
-    {
-        //SetText();
-    }
-    private void SetText()
+    public void SetText()
     {
         cardName.text = names[repositoryPosition];
         cardDescription.text = cardText[repositoryPosition];
-        cardPoint1.text = ExtractionCoeff().ToString();
+        cardPoint1.text = ("+" + ExtractionCoeff().ToString());
+        SetSprite();
+    }
 
-
+    private void SetSprite()
+    {
         switch (resTypes[repositoryPosition])
         {
             case "Mat":
@@ -76,33 +74,70 @@ public class ExtractionCard : MonoBehaviour
     public void Extraction()
     {
         resManager.SetRes(resTypes[repositoryPosition], ExtractionCoeff());
+        godLog.ExtractionCard(names[repositoryPosition], ExtractionCoeff(), ReturnRes());
         SetSatisfactionEx();
         card.UpdAnyCard();
+        description.ReExtraction();
+    }
+
+    private string ReturnRes()
+    {
+        switch (resTypes[repositoryPosition])
+        {
+            case "Mat":
+                return "материалов";
+            case "Eat":
+                return "пищи";
+            case "Hap":
+                return "счастья";
+            case "Man":
+                return "людей";
+            default:
+                return $"какой-то баг{resTypes[repositoryPosition]}";
+
+        }
     }
 
     private void SetSatisfactionEx()
     {
-        switch (cardAtr[repositoryPosition])
+        for (int i = 0; i < 5; i++)
         {
-            case "Card0":
-                for (int i = 0; i < 5; i++)
-                {
-                    godControl.gods[i].SetSatisfaction(godControl.satisfactionTakeMinus);
-                }
-                break;
-            case "Card1":
-                for (int i = 0; i < 5; i++)
-                {
-                    godControl.gods[i].SetSatisfaction(godControl.satisfactionTakeMinus + 1);
-                }
-                break;
+            godControl.gods[i].SetSatisfaction(godControl.satisfactionTakeMinus);
         }
     }
 
     public void UpdateCard()
     {
-        random = Random.Range(0, 15);
+        int[] values = { 0, 1, 2, 2, 3, 3, 4, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12, 13, 13, 14, 14 };
+        random = values[Random.Range(0, values.Length)];
         repositoryPosition = random;
         SetText();
+    }
+
+    public string ReturnResName()
+    {
+        return resTypes[repositoryPosition];
+    }
+
+    public int ReturnResCost()
+    {
+        return ExtractionCoeff();
+    }
+
+    public int ReturnResMean()
+    {
+        switch (resTypes[repositoryPosition])
+        {
+            case "Mat":
+                return resManager.mat;
+            case "Eat":
+                return resManager.eat;
+            case "Hap":
+                return resManager.hap;
+            case "Man":
+                return resManager.man;
+            default:
+                return -1;
+        }
     }
 }

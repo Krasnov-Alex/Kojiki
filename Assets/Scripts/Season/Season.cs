@@ -10,6 +10,7 @@ public class Season : MonoBehaviour
     [SerializeField] private Sprite autumn;
     [SerializeField] private Sprite spring;
     [SerializeField] private Sprite winter;
+    [SerializeField] private Card card;
     public int year = 1; 
     public int month = 1;
     public int seasonNow = 1;
@@ -33,6 +34,7 @@ public class Season : MonoBehaviour
     [SerializeField] private GodControl godControl;
     [SerializeField] private BuildCard buildCard;
     [SerializeField] private ResManager resManager;
+    [SerializeField] private GodLog godLog;
 
     private void Start()
     {
@@ -51,7 +53,7 @@ public class Season : MonoBehaviour
         }
         CheckAndDebuffSeason();
         SetSeason();
-        if (year == 10)
+        if (year == 5)
         {
             gamover.GameOver(true);
         }
@@ -61,8 +63,14 @@ public class Season : MonoBehaviour
     {
         if (seasonNow != GetSeason())
         {
+            godLog.SeasonWriteOff(SeasonDebuff(seasonNow));
             resManager.SeasonSetRes(SeasonDebuff(seasonNow));
             seasonNow = GetSeason();
+            card.UpdateCardText();
+        }
+        else
+        {
+            godLog.SeasonWriteOff(0);
         }
     }
 
@@ -143,6 +151,23 @@ public class Season : MonoBehaviour
                 return autumnCoef;
             default:
                 return 1;
+        }
+    }
+
+    public string GetSeasonName()
+    {
+        switch (GetSeason())
+        {
+            case 1:
+                return "Зима.";
+            case 2:
+                return "Весна.";
+            case 3:
+                return "Лето.";
+            case 4:
+                return "Осень.";
+            default:
+                return "";
         }
     }
 }

@@ -16,6 +16,7 @@ public class GodControl : MonoBehaviour
     public GodSatisfaction god4;
     public GodSatisfaction god5;
     public GodSatisfaction[] gods = new GodSatisfaction[5];
+    public GodLog godLog;
     private int findGod;
 
     void Start()
@@ -77,54 +78,42 @@ public class GodControl : MonoBehaviour
         }
     }
 
-    
-    
-    //public void SetGod(string atr)
-    //{
-    //    switch (atr)
-    //    {
-    //        case "God1":
-    //            GameObject target = this.gameObject.transform.GetChild(locate).gameObject;
-    //            GameObject godd = Instantiate(godSatis, target.transform.position, Quaternion.identity, this.gameObject.transform);
-    //            god1 = godd.GetComponent<GodSatisfaction>();
-    //            god1.SetDisplay(atr);
-    //            gods[locate] = god1;
-    //            locate++;
-    //            break;
-    //        case "God2":
-    //            GameObject target1 = this.gameObject.transform.GetChild(locate).gameObject;
-    //            GameObject godd1 = Instantiate(godSatis, target1.transform.position, Quaternion.identity, this.gameObject.transform);
-    //            god2 = godd1.GetComponent<GodSatisfaction>();
-    //            god2.SetDisplay(atr);
-    //            gods[locate] = god2;
-    //            locate++;
-    //            break;
-    //        case "God3":
-    //            GameObject target2 = this.gameObject.transform.GetChild(locate).gameObject;
-    //            GameObject godd2 = Instantiate(godSatis, target2.transform.position, Quaternion.identity, this.gameObject.transform);
-    //            god3 = godd2.GetComponent<GodSatisfaction>();
-    //            god3.SetDisplay(atr);
-    //            gods[locate] = god3;
-    //            locate++;
-    //            break;
-    //        case "God4":
-    //            GameObject target3 = this.gameObject.transform.GetChild(locate).gameObject;
-    //            GameObject godd3 = Instantiate(godSatis, target3.transform.position, Quaternion.identity, this.gameObject.transform);
-    //            god4 = godd3.GetComponent<GodSatisfaction>();
-    //            god4.SetDisplay(atr);
-    //            gods[locate] = god4;
-    //            locate++;
-    //            break;
-    //        case "God5":
-    //            GameObject target4 = this.gameObject.transform.GetChild(locate).gameObject;
-    //            GameObject godd4 = Instantiate(godSatis, target4.transform.position, Quaternion.identity, this.gameObject.transform);
-    //            god5 = godd4.GetComponent<GodSatisfaction>();
-    //            god5.SetDisplay(atr);
-    //            gods[locate] = god5;
-    //            locate++;
-    //            break;
-    //    }
-    //}
+    public void CheckGodSatisfaction()
+    {
+        int satisMin = 0;
+        int satisMax = 0;
+        string smileGod = "";
+        string angerGod = "";
+        for (int i = 0; i < gods.Length; i++)
+        {
+            if ((int)gods[i].satisfaction <= satisMin)
+            {
+                satisMin = (int)gods[i].satisfaction;
+                angerGod = gods[i].godName.text;
+            }
+            if ((int)gods[i].satisfaction >= satisMax)
+            {
+                satisMax = (int)gods[i].satisfaction;
+                smileGod = gods[i].godName.text;
+            }
+        }
+        if (satisMin != 0 && satisMax != 0)
+        {
+            godLog.SatisfactionGodsLog(smileGod, angerGod, 1);
+        }
+        else if (satisMin != 0 && satisMax == 0)
+        {
+            godLog.SatisfactionGodsLog(smileGod, angerGod, 2);
+        }
+        else if (satisMin == 0 && satisMax != 0)
+        {
+            godLog.SatisfactionGodsLog(smileGod, angerGod, 3);
+        }
+        else
+        {
+            godLog.SatisfactionGodsLog(smileGod, angerGod, 4);
+        }
+    }
 
     public void BuffDebuffCheck(string atr) 
     {
