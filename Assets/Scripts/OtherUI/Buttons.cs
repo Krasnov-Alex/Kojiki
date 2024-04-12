@@ -13,6 +13,16 @@ public class Buttons : MonoBehaviour
     [SerializeField] private GameObject pauseFrame;
     [SerializeField] private Text unvisUIText;
 
+    [SerializeField] private Card card;
+    private int secretPower = 5;
+
+
+    public void ReverseCard(GameObject reverseButton)
+    {
+        card.SecretPower();
+        reverseButton.SetActive(false);
+    }
+
     public void PauseGame()
     {
         if (pauseFrame.activeSelf)

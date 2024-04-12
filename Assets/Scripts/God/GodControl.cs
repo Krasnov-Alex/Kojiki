@@ -17,7 +17,7 @@ public class GodControl : MonoBehaviour
     public GodSatisfaction god5;
     public GodSatisfaction[] gods = new GodSatisfaction[5];
     public GodLog godLog;
-    private int findGod;
+    [SerializeField] private AudioInGame audioInGame;
 
     void Start()
     {
@@ -143,6 +143,28 @@ public class GodControl : MonoBehaviour
             case "God8":
 
                 break;
+        }
+    }
+
+    public void BuffNoSatisfactionMinus(bool atr)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            gods[i].dontTakeMinus = atr;
+        }
+    }
+
+    public void CheckForBuffInGods()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            if (gods[i].satisfaction >= 20 && gods[i].dontTakeMinusCheck)
+            {
+                gods[i].dontTakeMinusCheck = false;
+                BuffNoSatisfactionMinus(true);
+                audioInGame.BuffGod();
+                break;
+            }
         }
     }
 }
