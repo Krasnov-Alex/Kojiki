@@ -45,7 +45,7 @@ public class ResManager : MonoBehaviour
     {
         
 
-        if (eat < 0 || mat < 0 || hap < 0)
+        if (eat < 0 || mat < 0 || hap < 0 || man < 0)
         {
             gamover.GameOver(false);
         }

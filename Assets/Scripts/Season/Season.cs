@@ -14,6 +14,7 @@ public class Season : MonoBehaviour
     public int year = 1; 
     public int month = 1;
     public int seasonNow = 1;
+    private int stepForNextSeasonCount = 4;
 
     public Text yearTXT;
     
@@ -35,16 +36,20 @@ public class Season : MonoBehaviour
     [SerializeField] private BuildCard buildCard;
     [SerializeField] private ResManager resManager;
     [SerializeField] private GodLog godLog;
+    [SerializeField] private Text stepForNextSeasonCountText;
 
     private void Start()
     {
         SetSeason();
         yearTXT.text = year.ToString();
+        stepForNextSeasonCountText.text = stepForNextSeasonCount.ToString();
     }
 
     public void CreateStep()
     {
         month++;
+        stepForNextSeasonCount--;
+        stepForNextSeasonCountText.text = stepForNextSeasonCount.ToString();
         if (((float)month -1) % 24 == 0)
         {
             year++;
@@ -67,6 +72,8 @@ public class Season : MonoBehaviour
             resManager.SeasonSetRes(SeasonDebuff(seasonNow));
             seasonNow = GetSeason();
             card.UpdateCardText();
+            stepForNextSeasonCount = 6;
+            stepForNextSeasonCountText.text = stepForNextSeasonCount.ToString();
         }
         else
         {

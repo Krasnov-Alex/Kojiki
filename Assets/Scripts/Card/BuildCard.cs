@@ -42,8 +42,6 @@ public class BuildCard : MonoBehaviour
         SetText();
     }
 
-
-
     public void SetText()
     {
         cardName.text = names[repositoryPosition];

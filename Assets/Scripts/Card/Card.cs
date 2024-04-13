@@ -12,6 +12,9 @@ public class Card : MonoBehaviour
 
     public Season season;
 
+    [SerializeField] private GodsDebuff godsDebuff;
+    [SerializeField] private GodControl godControl;
+
     public GameObject cardBuild;
     public GameObject cardExchange;
     public GameObject cardExtraction;
@@ -37,7 +40,16 @@ public class Card : MonoBehaviour
         exchangeCard.UpdateCard();
         extractionCard.UpdateCard();
         season.CreateStep();
-                
+        godsDebuff.CreateStep();
+        godControl.BuffNoSatisfactionMinus(false);
+        godControl.CheckForBuffInGods();
+    }
+
+    public void SecretPower()
+    {
+        buildCard.UpdateCard();
+        exchangeCard.UpdateCard();
+        extractionCard.UpdateCard();
     }
 
     public void CardVisible()
