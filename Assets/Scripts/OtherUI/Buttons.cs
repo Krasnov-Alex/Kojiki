@@ -64,6 +64,11 @@ public class Buttons : MonoBehaviour
         
     }
 
+    public void Education()
+    {
+        SceneManager.LoadScene(2);
+    }
+
     public void RestartButton()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

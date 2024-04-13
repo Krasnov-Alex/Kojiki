@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
 
 public class GodSatisfaction : MonoBehaviour
 {
@@ -47,8 +49,11 @@ public class GodSatisfaction : MonoBehaviour
     private bool isLikeGodMessege = false;
     private bool isUnlikeGodMessege = false;
 
+    [SerializeField] public GameObject karaGods;
+    [SerializeField] public GameObject satisGods;
+    [SerializeField] public GameObject cardRev;
     [SerializeField] private GodsDebuff godDebuff;
-    private bool isGodDebuff = true;
+    public bool isGodDebuff = true;
 
     public bool dontTakeMinus = false;
     public bool dontTakeMinusCheck = true;
@@ -94,8 +99,10 @@ public class GodSatisfaction : MonoBehaviour
             satisfaction = maxSatis;
         }
 
-        if (satisfaction <= -20 && isGodDebuff)
+        if (satisfaction <= -20 && isGodDebuff && SceneManager.GetActiveScene().buildIndex != 2)
         {
+            GodsMessage temp = karaGods.GetComponent<GodsMessage>();
+            temp.ActiveMessege(karaGods);
             godDebuff.StartDebuff();
             audioInGame.DebuffGod();
             isGodDebuff = false;
@@ -134,6 +141,8 @@ public class GodSatisfaction : MonoBehaviour
             isReverseButton = false;
             reverseButton.SetActive(true);
             audioInGame.BuffGod();
+            GodsMessage temp = cardRev.GetComponent<GodsMessage>();
+            temp.ActiveMessege(cardRev);
         }
     }
 

@@ -163,6 +163,8 @@ public class GodControl : MonoBehaviour
                 gods[i].dontTakeMinusCheck = false;
                 BuffNoSatisfactionMinus(true);
                 audioInGame.BuffGod();
+                GodsMessage temp = gods[i].satisGods.GetComponent<GodsMessage>();
+                temp.ActiveMessege(gods[i].satisGods);
                 break;
             }
         }

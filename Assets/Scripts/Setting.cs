@@ -13,7 +13,7 @@ public class Setting : MonoBehaviour
         if (PlayerPrefs.HasKey("music"))
         {
             LoadAudioSetting();
-        }  
+        }
     }
 
     public void LoadAudioSetting()
@@ -21,6 +21,7 @@ public class Setting : MonoBehaviour
         musicVolume = PlayerPrefs.GetFloat("music");
         soundVolume = PlayerPrefs.GetFloat("sound");
     }
+
 
     public void SaveAudioSetting()
     {
@@ -41,3 +42,21 @@ public class Setting : MonoBehaviour
         audioInGame.SetAudioVolume();
     }
 }
+
+//public class Saver
+//{
+//    public static float musicVolume = 0.5f;
+//    public static float soundVolume = 0.5f;
+
+//    public static float SaverMusicVolume
+//    {
+//        get { return musicVolume; }
+//        set { musicVolume = value; }
+//    }
+
+//    public static float SaverSoundVolume
+//    {
+//        get { return soundVolume; }
+//        set { soundVolume = value; }
+//    }
+//}
